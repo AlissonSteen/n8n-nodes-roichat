@@ -1,0 +1,17 @@
+{
+	"node": "n8n-nodes-roichat.RoiChatTrigger",
+	"nodeVersion": "1.0",
+	"codex": {
+		"categories": ["Marketing & Content"],
+		"subcategories": {
+			"Marketing & Content": ["Marketing Automation"]
+		},
+		"resources": {
+			"primaryDocumentation": [
+				{
+					"url": "https://roichatpartner.com.br/api"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,12 @@
+dist
+node_modules
+
+# Logs
+*.log
+npm-debug.log*
+.npm
+
+# Temporary files
+*.tmp
+*.temp
+attached_assets/Pasted*.txt
