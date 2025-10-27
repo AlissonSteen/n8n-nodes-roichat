@@ -6,10 +6,7 @@
         "homepage": "https://roichatpartner.com.br",
         "keywords": [
                 "n8n-community-node-package",
-                "roichat",
-                "whatsapp",
-                "chat",
-                "automation"
+                "roichat"
         ],
         "author": {
                 "name": "RoiChat",
