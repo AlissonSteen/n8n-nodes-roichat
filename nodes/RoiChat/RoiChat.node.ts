@@ -74,7 +74,7 @@ export class RoiChat implements INodeType {
         type: 'number',
         typeOptions: { minValue: 1 },
         default: 1,
-        description: 'Navegue pelas páginas de contatos (10 por página).',
+        description: 'Navegue pelas páginas de contatos (10 por página)',
         displayOptions: {
           show: {
             resource: ['subscriber', 'tag', 'customField', 'flow', 'whatsappTemplate', 'conversation'],
@@ -87,7 +87,7 @@ export class RoiChat implements INodeType {
         name: 'subsSearch',
         type: 'string',
         default: '',
-        description: 'Filtra contatos por nome/telefone/email (se suportado pela API).',
+        description: 'Filtra contatos por nome/telefone/email (se suportado pela API)',
         displayOptions: {
           show: {
             resource: ['subscriber', 'tag', 'customField', 'flow', 'whatsappTemplate', 'conversation'],
@@ -96,7 +96,7 @@ export class RoiChat implements INodeType {
         },
       },
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: {
@@ -111,7 +111,7 @@ export class RoiChat implements INodeType {
           },
         },
         default: '',
-        description: 'Identificador único do contato (user_ns).',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Subscriber: Create fields
@@ -192,7 +192,10 @@ export class RoiChat implements INodeType {
           { displayName: 'Event NS', name: 'event_ns', type: 'string', default: '' },
           { displayName: 'Interagiu Nas Últimas 24h', name: 'is_interacted_in_last_24h', type: 'options', options: [{ name: 'Sim', value: 'yes' }, { name: 'Não', value: 'no' }], default: 'yes' },
           { displayName: 'Label ID', name: 'label_id', type: 'number', default: 0 },
-          { displayName: 'Limite', name: 'limit', type: 'number', typeOptions: { minValue: 1, maxValue: 100 }, default: 50 },
+          {
+            displayName: 'Limite', name: 'limit', type: 'number',
+            description: 'Max number of results to return', typeOptions: { minValue: 1, maxValue: 100 }, default: 50
+          },
           { displayName: 'Nome', name: 'name', type: 'string', default: '' },
           { displayName: 'Opt-in Email', name: 'is_opt_in_email', type: 'options', options: [{ name: 'Sim', value: 'yes' }, { name: 'Não', value: 'no' }], default: 'yes' },
           { displayName: 'Opt-in SMS', name: 'is_opt_in_sms', type: 'options', options: [{ name: 'Sim', value: 'yes' }, { name: 'Não', value: 'no' }], default: 'yes' },
@@ -227,14 +230,14 @@ export class RoiChat implements INodeType {
 
       // Contato (dropdown) para operações de tag que exigem um contato
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['tag'], operation: ['addToSubscriber', 'addMultipleTags', 'removeFromSubscriber', 'removeMultipleTags'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // ---------- Tags (dropdown com paginação/busca) ----------
@@ -244,7 +247,7 @@ export class RoiChat implements INodeType {
         type: 'number',
         typeOptions: { minValue: 1 },
         default: 1,
-        description: 'Navegue pelas páginas de tags (10 por página).',
+        description: 'Navegue pelas páginas de tags (10 por página)',
         displayOptions: {
           show: {
             resource: ['tag', 'broadcast'],
@@ -257,7 +260,7 @@ export class RoiChat implements INodeType {
         name: 'tagsSearch',
         type: 'string',
         default: '',
-        description: 'Filtra tags por nome.',
+        description: 'Filtra tags por nome',
         displayOptions: {
           show: {
             resource: ['tag', 'broadcast'],
@@ -268,9 +271,10 @@ export class RoiChat implements INodeType {
 
       // Tag única (dropdown)
       {
-        displayName: 'Nome Da Tag',
+        displayName: 'Nome Da Tag Name or ID',
         name: 'tagName',
         type: 'options',
+        description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
         typeOptions: {
           loadOptionsMethod: 'getTags',
           loadOptionsDependsOn: ['tagsPage', 'tagsSearch'],
@@ -284,7 +288,7 @@ export class RoiChat implements INodeType {
 
       // Tag múltipla (dropdown multi)
       {
-        displayName: 'Tags',
+        displayName: 'Tag Names or IDs',
         name: 'tagNames',
         type: 'multiOptions',
         typeOptions: {
@@ -294,7 +298,7 @@ export class RoiChat implements INodeType {
         required: true,
         displayOptions: { show: { resource: ['tag'], operation: ['addMultipleTags', 'removeMultipleTags'] } },
         default: [],
-        description: 'Selecione múltiplas tags (até 20).',
+        description: 'Selecione múltiplas tags (até 20). Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Tag: criar (texto)
@@ -316,7 +320,10 @@ export class RoiChat implements INodeType {
         default: {},
         displayOptions: { show: { resource: ['tag'], operation: ['getMany'] } },
         options: [
-          { displayName: 'Limite', name: 'limit', type: 'number', typeOptions: { minValue: 1 }, default: 50 },
+          {
+            displayName: 'Limite', name: 'limit', type: 'number',
+            description: 'Max number of results to return', typeOptions: { minValue: 1 }, default: 50
+          },
           { displayName: 'Nome', name: 'name', type: 'string', default: '' },
           { displayName: 'Página', name: 'page', type: 'number', default: 1 },
         ],
@@ -341,24 +348,24 @@ export class RoiChat implements INodeType {
 
       // Custom Field: contato (dropdown compartilhado)
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['customField'], operation: ['setFieldValue'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['customField'], operation: ['setMultipleFields'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Custom Field: field name
@@ -370,7 +377,7 @@ export class RoiChat implements INodeType {
         required: true,
         displayOptions: { show: { resource: ['customField'], operation: ['setFieldValue'] } },
         default: '',
-        description: 'Escolha da lista ou especifique um ID usando uma expressão.',
+        description: 'Escolha da lista ou especifique um ID usando uma expressão. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Custom Field: field value
@@ -406,7 +413,7 @@ export class RoiChat implements INodeType {
                 type: 'options',
                 typeOptions: { loadOptionsMethod: 'getCustomFields' },
                 default: '',
-                description: 'Escolha da lista ou especifique um ID usando uma expressão.',
+                description: 'Escolha da lista ou especifique um ID usando uma expressão. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
               },
               { displayName: 'Valor Do Campo', name: 'fieldValue', type: 'string', default: '' },
             ],
@@ -432,14 +439,14 @@ export class RoiChat implements INodeType {
 
       // Flow: contato (dropdown)
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['flow'], operation: ['sendToSubscriber'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Flow: controles do dropdown de fluxos
@@ -449,7 +456,7 @@ export class RoiChat implements INodeType {
         type: 'number',
         typeOptions: { minValue: 1 },
         default: 1,
-        description: 'Navegue pelas páginas de fluxos (10 por página).',
+        description: 'Navegue pelas páginas de fluxos (10 por página)',
         displayOptions: { show: { resource: ['flow'], operation: ['sendToSubscriber'] } },
       },
       {
@@ -457,7 +464,7 @@ export class RoiChat implements INodeType {
         name: 'flowsSearch',
         type: 'string',
         default: '',
-        description: 'Filtra por nome do fluxo.',
+        description: 'Filtra por nome do fluxo',
         displayOptions: { show: { resource: ['flow'], operation: ['sendToSubscriber'] } },
       },
 
@@ -470,7 +477,7 @@ export class RoiChat implements INodeType {
         required: true,
         displayOptions: { show: { resource: ['flow'], operation: ['sendToSubscriber'] } },
         default: '',
-        description: 'Escolha da lista ou especifique um ID usando uma expressão.',
+        description: 'Escolha da lista ou especifique um ID usando uma expressão. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // ===============================
@@ -515,7 +522,7 @@ export class RoiChat implements INodeType {
         type: 'number',
         typeOptions: { minValue: 1 },
         default: 1,
-        description: 'Navegue pelas páginas de tags (10 por página).',
+        description: 'Navegue pelas páginas de tags (10 por página)',
         displayOptions: { show: { resource: ['broadcast'], operation: ['sendByTag'] } },
       },
       {
@@ -523,18 +530,18 @@ export class RoiChat implements INodeType {
         name: 'tagsSearch',
         type: 'string',
         default: '',
-        description: 'Filtra tags por nome.',
+        description: 'Filtra tags por nome',
         displayOptions: { show: { resource: ['broadcast'], operation: ['sendByTag'] } },
       },
       {
-        displayName: 'Nome Da Tag',
+        displayName: 'Nome Da Tag Name or ID',
         name: 'tagName',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getTags', loadOptionsDependsOn: ['tagsPage', 'tagsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['broadcast'], operation: ['sendByTag'] } },
         default: '',
-        description: 'Nome da tag para filtrar contatos',
+        description: 'Nome da tag para filtrar contatos. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // ===============================
@@ -552,14 +559,14 @@ export class RoiChat implements INodeType {
 
       // WhatsApp Template: contato (dropdown)
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['whatsappTemplate'], operation: ['send'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // WhatsApp Template: controles de paginação/busca
@@ -569,7 +576,7 @@ export class RoiChat implements INodeType {
         type: 'number',
         typeOptions: { minValue: 1 },
         default: 1,
-        description: 'Navegue pelas páginas de templates (10 por página).',
+        description: 'Navegue pelas páginas de templates (10 por página)',
         displayOptions: { show: { resource: ['whatsappTemplate'], operation: ['send'] } },
       },
       {
@@ -577,7 +584,7 @@ export class RoiChat implements INodeType {
         name: 'templateSearch',
         type: 'string',
         default: '',
-        description: 'Filtra templates por nome.',
+        description: 'Filtra templates por nome',
         displayOptions: { show: { resource: ['whatsappTemplate'], operation: ['send'] } },
       },
 
@@ -590,7 +597,7 @@ export class RoiChat implements INodeType {
         required: true,
         displayOptions: { show: { resource: ['whatsappTemplate'], operation: ['send'] } },
         default: '',
-        description: 'Choose from the list, or specify an ID using an expression',
+        description: 'Choose from the list, or specify an ID using an expression. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // WhatsApp Template: parameters (optional)
@@ -618,14 +625,14 @@ export class RoiChat implements INodeType {
 
       // Conversation: contato (dropdown)
       {
-        displayName: 'User NS',
+        displayName: 'User NS Name or ID',
         name: 'userNs',
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getSubscribers', loadOptionsDependsOn: ['subsPage', 'subsSearch'] },
         required: true,
         displayOptions: { show: { resource: ['conversation'], operation: ['getHistory'] } },
         default: '',
-        description: 'Identificador único do contato (user_ns)',
+        description: 'Identificador único do contato (user_ns). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
       },
 
       // Conversation: limit
@@ -643,168 +650,145 @@ export class RoiChat implements INodeType {
 
   methods = {
     loadOptions: {
-      // ---------- Subscribers (paginação + busca) ----------
       async getSubscribers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        const options: INodePropertyOptions[] = [];
-        try {
-          const page = (this.getCurrentNodeParameter('subsPage', 1) as number) || 1;
-          const search = (this.getCurrentNodeParameter('subsSearch', '') as string) || '';
+        const out: INodePropertyOptions[] = [];
+        const page = Number(this.getCurrentNodeParameter('subsPage') ?? 1);
+        const search = String(this.getCurrentNodeParameter('subsSearch') ?? '');
 
-          const qs: IDataObject = { limit: 10, page };
-          // Ajuste conforme tua API: aqui envio "name" como busca básica
-          if (search) qs.name = search;
+        const qs: IDataObject = { limit: 10, page };
+        if (search) qs.name = search;
 
-          const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
-            method: 'GET',
-            url: 'https://roichatpartner.com.br/api/subscribers',
-            qs,
-            json: true,
-          });
+        const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
+          method: 'GET',
+          url: 'https://roichatpartner.com.br/api/subscribers',
+          qs,
+          json: true,
+        });
 
-          let subs: IDataObject[] = [];
-          if (Array.isArray(res)) subs = res as IDataObject[];
-          else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) subs = (res as IDataObject).data as IDataObject[];
-
-          for (const s of subs) {
-            const id = (s.user_ns || s.id || s._id) as string;
-            const first = (s.first_name || (s as any).firstName || '') as string;
-            const last = (s.last_name || (s as any).lastName || '') as string;
-            const phone = (s.phone || '') as string;
-            const email = (s.email || '') as string;
-            const label = [`${first} ${last}`.trim(), phone || email || id].filter(Boolean).join(' — ');
-            if (id) options.push({ name: label || id, value: id, description: `NS: ${id}` });
-          }
-
-          return options;
-        } catch (error: any) {
-          throw new NodeOperationError(this.getNode(), `Erro ao carregar contatos: ${error.message}`);
+        let subs: IDataObject[] = [];
+        if (Array.isArray(res)) subs = res as IDataObject[];
+        else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) {
+          subs = ((res as IDataObject).data as IDataObject[]);
         }
+
+        for (const s of subs) {
+          const id = (s.user_ns || s.id || s._id) as string | undefined;
+          const first = (s.first_name || (s as IDataObject).firstName || '') as string;
+          const last = (s.last_name || (s as IDataObject).lastName || '') as string;
+          const phone = (s.phone || '') as string;
+          const email = (s.email || '') as string;
+          if (!id) continue;
+          const label = [`${first} ${last}`.trim(), phone || email || id].filter(Boolean).join(' — ');
+          out.push({ name: label || id, value: id, description: `NS: ${id}` });
+        }
+        return out;
       },
 
-      // ---------- Tags (paginação + busca) ----------
       async getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        const returnData: INodePropertyOptions[] = [];
-        try {
-          const page = (this.getCurrentNodeParameter('tagsPage', 1) as number) || 1;
-          const search = (this.getCurrentNodeParameter('tagsSearch', '') as string) || '';
+        const out: INodePropertyOptions[] = [];
+        const page = Number(this.getCurrentNodeParameter('tagsPage') ?? 1);
+        const search = String(this.getCurrentNodeParameter('tagsSearch') ?? '');
 
-          const qs: IDataObject = { per_page: 10, page };
-          if (search) qs.name = search;
+        const qs: IDataObject = { per_page: 10, page };
+        if (search) qs.name = search;
 
-          const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
-            method: 'GET',
-            url: 'https://roichatpartner.com.br/api/flow/tags',
-            qs,
-            json: true,
-          });
+        const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
+          method: 'GET',
+          url: 'https://roichatpartner.com.br/api/flow/tags',
+          qs,
+          json: true,
+        });
 
-          let tags: IDataObject[] = [];
-          if (Array.isArray(res)) tags = res as IDataObject[];
-          else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) tags = (res as IDataObject).data as IDataObject[];
-
-          for (const t of tags) {
-            const name = (t.name || (t as any).tag_name) as string;
-            if (name) returnData.push({ name, value: name });
-          }
-
-          return returnData;
-        } catch (error: any) {
-          throw new NodeOperationError(this.getNode(), `Erro ao carregar tags: ${error.message}`);
+        let tags: IDataObject[] = [];
+        if (Array.isArray(res)) tags = res as IDataObject[];
+        else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) {
+          tags = ((res as IDataObject).data as IDataObject[]);
         }
+
+        for (const t of tags) {
+          const name = (t.name || (t as IDataObject).tag_name) as string | undefined;
+          if (name) out.push({ name, value: name });
+        }
+        return out;
       },
 
-      // ---------- Flows (paginação + busca) ----------
       async getFlows(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        const returnData: INodePropertyOptions[] = [];
-        try {
-          const page = (this.getCurrentNodeParameter('flowsPage', 1) as number) || 1;
-          const search = (this.getCurrentNodeParameter('flowsSearch', '') as string) || '';
+        const out: INodePropertyOptions[] = [];
+        const page = Number(this.getCurrentNodeParameter('flowsPage') ?? 1);
+        const search = String(this.getCurrentNodeParameter('flowsSearch') ?? '');
 
-          const qs: IDataObject = { per_page: 10, page };
-          if (search) qs.search = search; // ajuste para o param real (ex.: name)
+        const qs: IDataObject = { per_page: 10, page };
+        if (search) qs.search = search;
 
-          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
-            method: 'GET',
-            url: 'https://roichatpartner.com.br/api/flow/subflows',
-            qs,
-            json: true,
-          });
+        const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
+          method: 'GET',
+          url: 'https://roichatpartner.com.br/api/flow/subflows',
+          qs,
+          json: true,
+        });
 
-          let flows: IDataObject[] = [];
-          if (Array.isArray(responseData)) {
-            flows = responseData;
-          } else if ((responseData as IDataObject).data && Array.isArray((responseData as IDataObject).data)) {
-            flows = (responseData as IDataObject).data as IDataObject[];
-          }
-
-          for (const flow of flows) {
-            const flowId = (flow.sub_flow_ns || (flow as any).flow_id || (flow as any).id || (flow as any)._id) as string;
-            const flowName = (flow.name || (flow as any).flow_name || flowId) as string;
-            if (flowId && flowName) {
-              returnData.push({ name: flowName, value: flowId, description: `NS: ${(flow as any).sub_flow_ns || flowId}` });
-            }
-          }
-          return returnData;
-        } catch (error: any) {
-          throw new NodeOperationError(this.getNode(), `Erro ao carregar fluxos: ${error.message}`);
+        let flows: IDataObject[] = [];
+        if (Array.isArray(res)) flows = res as IDataObject[];
+        else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) {
+          flows = ((res as IDataObject).data as IDataObject[]);
         }
+
+        for (const f of flows) {
+          const id = (f.sub_flow_ns || f.flow_id || f.id || f._id) as string | undefined;
+          const name = (f.name || (f as IDataObject).flow_name || id) as string | undefined;
+          if (id && name) out.push({ name, value: id, description: `NS: ${(f.sub_flow_ns as string) || id}` });
+        }
+        return out;
       },
 
-      // ---------- Custom Fields ----------
       async getCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        const returnData: INodePropertyOptions[] = [];
-        try {
-          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
-            method: 'GET',
-            url: 'https://roichatpartner.com.br/api/flow/user-fields',
-            json: true,
-          });
+        const out: INodePropertyOptions[] = [];
+        const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
+          method: 'GET',
+          url: 'https://roichatpartner.com.br/api/flow/user-fields',
+          json: true,
+        });
 
-          let fields: IDataObject[] = [];
-          if (Array.isArray(responseData)) fields = responseData;
-          else if ((responseData as IDataObject).data && Array.isArray((responseData as IDataObject).data)) fields = (responseData as IDataObject).data as IDataObject[];
-
-          for (const field of fields) {
-            const fieldName = (field.name || (field as any).field_name) as string;
-            const fieldId = (field.var_ns || (field as any).id || (field as any)._id) as string;
-            if (fieldName && fieldId) returnData.push({ name: fieldName, value: fieldId });
-          }
-          return returnData;
-        } catch (error: any) {
-          throw new NodeOperationError(this.getNode(), `Erro ao carregar campos personalizados: ${error.message}`);
+        let fields: IDataObject[] = [];
+        if (Array.isArray(res)) fields = res as IDataObject[];
+        else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) {
+          fields = ((res as IDataObject).data as IDataObject[]);
         }
+
+        for (const f of fields) {
+          const name = (f.name || (f as IDataObject).field_name) as string | undefined;
+          const id = (f.var_ns || f.id || f._id) as string | undefined;
+          if (name && id) out.push({ name, value: id });
+        }
+        return out;
       },
 
-      // ---------- Templates (paginação + busca) ----------
       async getTemplates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-        const returnData: INodePropertyOptions[] = [];
-        try {
-          const page = (this.getCurrentNodeParameter('templatePage', 1) as number) || 1;
-          const search = (this.getCurrentNodeParameter('templateSearch', '') as string) || '';
+        const out: INodePropertyOptions[] = [];
+        const page = Number(this.getCurrentNodeParameter('templatePage') ?? 1);
+        const search = String(this.getCurrentNodeParameter('templateSearch') ?? '');
 
-          // API de templates é POST — enviamos paginação/busca no body
-          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
-            method: 'POST',
-            url: 'https://roichatpartner.com.br/api/whatsapp-template/list',
-            body: { page, per_page: 10, search },
-            json: true,
-          });
+        const res = await this.helpers.httpRequestWithAuthentication.call(this, 'roiChatApi', {
+          method: 'POST',
+          url: 'https://roichatpartner.com.br/api/whatsapp-template/list',
+          body: { page, per_page: 10, search },
+          json: true,
+        });
 
-          let templates: IDataObject[] = [];
-          if (Array.isArray(responseData)) templates = responseData;
-          else if ((responseData as IDataObject).data && Array.isArray((responseData as IDataObject).data)) templates = (responseData as IDataObject).data as IDataObject[];
-
-          for (const template of templates) {
-            const templateName = template.name as string;
-            const templateLanguage = (template.language || 'pt_BR') as string;
-            if (templateName) returnData.push({ name: `${templateName} (${templateLanguage})`, value: templateName });
-          }
-          return returnData;
-        } catch (error: any) {
-          throw new NodeOperationError(this.getNode(), `Erro ao carregar templates WhatsApp: ${error.message}`);
+        let templates: IDataObject[] = [];
+        if (Array.isArray(res)) templates = res as IDataObject[];
+        else if ((res as IDataObject).data && Array.isArray((res as IDataObject).data)) {
+          templates = ((res as IDataObject).data as IDataObject[]);
         }
+
+        for (const t of templates) {
+          const name = (t.name as string) || '';
+          const lang = ((t.language as string) || 'pt_BR');
+          if (name) out.push({ name: `${name} (${lang})`, value: name });
+        }
+        return out;
       },
-    },
+    }
   };
 
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
@@ -1102,7 +1086,8 @@ export class RoiChat implements INodeType {
         }
       } catch (error) {
         if (this.continueOnFail()) {
-          returnData.push({ error: (error as any).message });
+          const err = error as { message?: string };
+          returnData.push({ error: err?.message ?? 'Unknown error' });
           continue;
         }
         throw error;
